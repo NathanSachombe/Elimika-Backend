@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-
+from flask_bcrypt import check_password_hash
 db = SQLAlchemy()
 
 class UserModel(db.Model):
@@ -13,6 +13,16 @@ class UserModel(db.Model):
 
     events = db.relationship('EventModel', secondary='user_events', backref='users')
     courses = db.relationship('CourseModel', secondary='user_courses', backref='users')
+
+    def check_password(self, plain_password):
+        return check_password_hash(self.password, plain_password)
+    
+    def to_json(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'email': self.email
+        }
 
 class ProfileModel(db.Model):
     __tablename__ = 'profiles'
