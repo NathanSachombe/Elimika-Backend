@@ -6,6 +6,7 @@ from flask_restful import Api
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from datetime import timedelta
+from Resources.courses import Course
 
 app = Flask(__name__)
 api = Api(app)
@@ -28,6 +29,8 @@ db.init_app(app)
 @app.route("/")
 def index():
     return "<h1>Welcome to Elimika!</h1>"
+
+api.add_resource(Course, '/course', '/course/<int:id>')
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

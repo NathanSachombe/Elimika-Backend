@@ -69,7 +69,7 @@ class CourseModel(db.Model):
     category = db.Column(db.String(100), nullable=False)
     price = db.Column(db.Integer, nullable=False)
     image = db.Column(db.String , nullable=False)
-    description = db.Column(db.Text, nullable=False)
+    description = db.Column(db.String, nullable=False)
     duration = db.Column(db.String, nullable=False)
     created_at = db.Column(db.TIMESTAMP, server_default=db.func.now())
     updated_at = db.Column(db.TIMESTAMP, onupdate=db.func.now())
