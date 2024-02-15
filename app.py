@@ -6,10 +6,6 @@ from flask_restful import Api
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from datetime import timedelta
-from models import UserModel
-
-from resources.users import User,Login
-from resources.userCourses import UserCourses
 
 app = Flask(__name__)
 api = Api(app)
@@ -35,11 +31,6 @@ api.add_resource(UserCourses, '/userCourse','/userCourse/<int:id>')
 @app.route("/")
 def index():
     return "<h1>Welcome to Elimika!</h1>"
-
-@jwt.user_lookup_loader
-def user_lookup_callback(_jwt_header, jwt_data):
-    identity = jwt_data["sub"]
-    return UserModel.query.filter_by(id=identity).one_or_none().to_json()
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
