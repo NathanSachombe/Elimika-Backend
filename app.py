@@ -6,12 +6,15 @@ from flask_restful import Api
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from datetime import timedelta
+
+from Resources.courseEnrolment import UserCourses
+from Resources.users import User,Login
 from Resources.courses import Course
 
 app = Flask(__name__)
 api = Api(app)
 CORS(app)
-bcrypy = Bcrypt(app)
+bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] ='sqlite:///database.db'
@@ -25,12 +28,15 @@ app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=30)
 migrations = Migrate(app,db)
 db.init_app(app)
 
+#routes
+api.add_resource(User, '/users', '/users/<int:id>')
+api.add_resource(Login, '/login')
+api.add_resource(UserCourses, '/userCourse','/userCourse/<int:id>')
+api.add_resource(Course, '/course','/course/<int:id>')
 
 @app.route("/")
 def index():
     return "<h1>Welcome to Elimika!</h1>"
-
-api.add_resource(Course, '/course', '/course/<int:id>')
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
