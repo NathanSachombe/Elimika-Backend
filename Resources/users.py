@@ -5,7 +5,7 @@ from flask_bcrypt import generate_password_hash
 
 from flask_jwt_extended import create_access_token, create_refresh_token
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
-from Resources.courseEnrolment import userCourse_fields
+from Resources.courses import resource_fields
 
 user_fields = {
     "id" : fields.Integer,
@@ -13,7 +13,7 @@ user_fields = {
     "email" : fields.String,
     "password" : fields.String,
     "role":fields.String,
-    "courses": fields.Nested(userCourse_fields)
+    "courses": fields.Nested(resource_fields)
 }
 
 class User(Resource):
