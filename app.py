@@ -6,6 +6,7 @@ from flask_restful import Api
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from datetime import timedelta
+from Resources.events import Events
 
 app = Flask(__name__)
 api = Api(app)
@@ -29,5 +30,7 @@ db.init_app(app)
 def index():
     return "<h1>Welcome to Elimika!</h1>"
 
+api.add_resource(Events,'/event', '/event/<int:id>')
+
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5001)

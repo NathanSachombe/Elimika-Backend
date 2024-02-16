@@ -1,81 +1,80 @@
 from flask_restful import Resource, reqparse, fields, marshal_with
-from models import db, CourseModel
+from models import db, EventModel
 
 resource_fields = {
     'id': fields.Integer,
     'title': fields.String,
-    'category': fields.String,
-    'price': fields.Integer,
-    'image': fields.String,
     'description': fields.String,
-    'duration': fields.String,
+    'image': fields.String,
+    'capacity': fields.Integer,
+    'date': fields.DateTime,
     'created_at': fields.DateTime,
     'updated_at': fields.DateTime,
 }
 
-class Course(Resource):
+class Events(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument('title', required=True, help="Title is required!")
-    parser.add_argument('category', required=True, help="Category is required!")
-    parser.add_argument('price', required=True, help="Price is required!")
-    parser.add_argument('image', required=True, help="Image is required!")
-    parser.add_argument('description', required=True, help="Description is required!")
-    parser.add_argument('duration', required=True, help="Duration is required!")
+    parser.add_argument('title', required=True, help="Title is required")
+    parser.add_argument('description', required=True, help='Description is required')
+    parser.add_argument('image', required=True, help='Image is required')
+    parser.add_argument('capacity', required=True, help='Capacity is required')
+    parser.add_argument('date', required=False, help='Date is not required')
+
+    # parser = reqparse.RequestParser()
+    # parser.add_argument('title', required=False)
+    # parser.add_argument('description', required=False)
+    # parser.add_argument('image', required=False)
+    # parser.add_argument('capacity', required=False)
+    # parser.add_argument('date', required=False)
 
     @marshal_with(resource_fields)
     def get(self, id=None):
         if id:
-            course = CourseModel.query.filter_by(id=id).first()
-            if course:
-                return course
-            else:
-                return {"message": "Course not found", "status": "fail"}, 404
+            event = EventModel.query.filter_by(id=id).first()
+            return event
         else:
-            courses = CourseModel.query.all()
-            return courses
-        
-    def post(self):
-        data = Course.parser.parse_args()
-        course = CourseModel(**data)
+            events = EventModel.query.all()
+            return events
 
+    def post(self):
+        data = Events.parser.parse_args()
+        event = EventModel(**data)
         try:
-            db.session.add(course)
+            db.session.add(event)
             db.session.commit()
-            
-            return{"message": "Course added successfully", "status": "success"}, 201
+            return {"message": "Event created successfully!"}, 201
         except Exception as e:
-            return {"message": "Unable to add course", "status": "fail"}, 500
-        
+            return {"message": 'unable to add event', 'status': 'fail'}
+
     def delete(self, id):
         try:
-            course = CourseModel.query.filter_by(id=id).first()
+            event = EventModel.query.filter_by(id=id).first()
 
-            if course:
-                db.session.delete(course)
+            if event:
+                db.session.delete(event)
                 db.session.commit()
-                return{"message": "Course deleted successfully", "status": "success"}
+                return {"message": "Event deleted Successfully", 'status': 'SUCCESS'}
             else:
-                return {"message": "Course not found", "status": "fail"}, 404
-        except:
-            return {"message": "Unable to delete course", "status": "success"}, 500
-        
+                return {"message": "No Event Found", 'status': 'FAILED TO DELETE'}
+        except Exception as e:
+            return {'message': "Failed To Delete The Event"}
+
     def patch(self, id):
         if id:
-            course = CourseModel.query.filter_by(id=id).first()
+            event = EventModel.query.filter_by(id=id).first()
 
-            if course:
-                data = Course.parser.parse_args()
-
+            if event:
+                data = Events.update_parser.parse_args()
                 for key, value in data.items():
                     if value is not None:
-                        setattr(course, key, value)
+                        setattr(event, key, value)
 
                 try:
                     db.session.commit()
-                    return {"message": "Course updated successfully", "status": "success" }, 200
+                    return {'Message': 'Update successful', 'Status': 'OK'}, 201
                 except Exception as e:
-                    print(f"An error occurred: {e}")
+                    print(f'Error occurred while updating the user {e}')
                     db.session.rollback()
-                    return {"message": "Unable to update course", "status": "fail"}, 500
+                    return {'Message': 'Failed to update the user', 'Status': 'FAILED'}
             else:
-                return {"message": "Course not found", "status": "fail"}, 404
+                return {'message': 'Event not found', 'Status': 'NOT FOUND'}
