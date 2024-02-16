@@ -7,6 +7,7 @@ from flask_jwt_extended import create_access_token, create_refresh_token
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 from Resources.courses import resource_fields
 
+#user fields 
 user_fields = {
     "id" : fields.Integer,
     "username" : fields.String,
