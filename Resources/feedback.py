@@ -32,9 +32,12 @@ class Feedback(Resource):
             return feedbacks
         
 
-    #@jwt_required()
+    @jwt_required()
     def post(self):
+      current_user_id = get_jwt_identity()
       data = Feedback.parser.parse_args() 
+
+      data['user_id'] = current_user_id
 
       feedback= FeedbackModel(**data)
 
