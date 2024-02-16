@@ -1,3 +1,4 @@
+from typing import Required
 from flask_restful import Resource, reqparse, fields, marshal_with
 from models import db, EventModel
 from datetime import datetime
@@ -19,7 +20,7 @@ class Events(Resource):
     parser.add_argument('description', required=True, help='Description is required')
     parser.add_argument('image', required=True, help='Image is required')
     parser.add_argument('capacity', required=True, help='Capacity is required')
-    parser.add_argument('date', required=False, help='Date is not required')
+    parser.add_argument('date', required=True, help='Date is required')
 
     # parser = reqparse.RequestParser()
     # parser.add_argument('title', required=False)
