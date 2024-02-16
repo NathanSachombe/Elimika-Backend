@@ -12,6 +12,7 @@ from Resources.users import User,Login
 from Resources.courses import Course
 from Resources.feedback import Feedback
 from Resources.events import Events
+from Resources.eventEnrolment import EnrolledEvents
 
 app = Flask(__name__)
 api = Api(app)
