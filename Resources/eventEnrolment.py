@@ -18,7 +18,7 @@ class EnrolledEvents(Resource):
         current_user_id = get_jwt_identity()
         if current_user_id:
             UserEvent = UserEventModel.query.filter_by(user_id=current_user_id).all()
-            return marshal(EnrolledEvents, resource_fields)
+            return marshal(UserEvent, resource_fields)
         else:
             return {"message":"you have not enrolled for any event"}
         
