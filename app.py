@@ -37,6 +37,7 @@ api.add_resource(Login, '/login')
 api.add_resource(UserCourses, '/userCourse','/userCourse/<int:id>')
 api.add_resource(Course, '/course','/course/<int:id>')
 api.add_resource(EnrolledEvents,'/enrolledEvent','/enrolledEvent/<int:id>')
+api.add_resource(Events,'/event','/event/<int:id>')
 
 @app.route("/")
 def index():
