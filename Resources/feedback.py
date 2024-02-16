@@ -18,7 +18,7 @@ class Feedback(Resource):
     parser.add_argument('likes', required= False )
     parser.add_argument('dislikes', required= False)
     
-
+#Read a feedback 
     @marshal_with(Feedback_fields)
     def get(self, id=None):
     
