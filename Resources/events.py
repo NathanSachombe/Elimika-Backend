@@ -1,5 +1,6 @@
 from flask_restful import Resource, reqparse, fields, marshal_with
 from models import db, EventModel
+from datetime import datetime
 
 resource_fields = {
     'id': fields.Integer,
@@ -38,6 +39,9 @@ class Events(Resource):
 
     def post(self):
         data = Events.parser.parse_args()
+
+        if 'date' in data:
+            data['date'] = datetime.strptime(data['date'], '%Y-%m-%d %H:%M:%S')
         event = EventModel(**data)
         try:
             db.session.add(event)
