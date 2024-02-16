@@ -14,12 +14,11 @@ Feedback_fields = {
 
 class Feedback(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument('user_id', required=True, help="user_id is required!")
     parser.add_argument('comment', required=False, )
     parser.add_argument('likes', required= False )
     parser.add_argument('dislikes', required= False)
     
-
+#Read a feedback 
     @marshal_with(Feedback_fields)
     def get(self, id=None):
     
@@ -34,9 +33,8 @@ class Feedback(Resource):
 
     @jwt_required()
     def post(self):
-      current_user_id = get_jwt_identity()
       data = Feedback.parser.parse_args() 
-
+      current_user_id = get_jwt_identity()
       data['user_id'] = current_user_id
 
       feedback= FeedbackModel(**data)
