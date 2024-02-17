@@ -10,6 +10,7 @@ from datetime import timedelta
 from Resources.courseEnrolment import UserCourses
 from Resources.users import User,Login
 from Resources.courses import Course
+from Resources.profile import ProfileResource
 from Resources.feedback import Feedback
 # from Resources.events import Events
 from Resources.eventEnrolment import EnrolledEvents
@@ -36,9 +37,7 @@ api.add_resource(User, '/users', '/users/<int:id>')
 api.add_resource(Login, '/login')
 api.add_resource(UserCourses, '/userCourse','/userCourse/<int:id>')
 api.add_resource(Course, '/course','/course/<int:id>')
-api.add_resource(EnrolledEvents,'/enrolledEvent','/enrolledEvent/<int:id>')
-api.add_resource(Feedback,'/feedback','/feedback/<int:id>')
-
+api.add_resource(ProfileResource, '/profile','/profile/<int:id>')
 @app.route("/")
 def index():
     return "<h1>Welcome to Elimika!</h1>"

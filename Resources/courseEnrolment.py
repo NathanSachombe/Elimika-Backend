@@ -8,7 +8,7 @@ userCourse_fields = {
     "user_id":fields.Integer,
     "course_id": fields.Integer,
 }
-
+ 
 class UserCourses(Resource):
     userCourse_parser = reqparse.RequestParser()
     #userworkout_parser.add_argument('user_id', required = True,type=int,help="Users id is required" )
