@@ -52,12 +52,12 @@ class Feedback(Resource):
     
     #@jwt_required()
     def patch(self,id):
-        data = FeedbackModel.Feedback_parser.parse_args()
-        Feedback = FeedbackModel.query.get(id)
+        data = Feedback.parser.parse_args()
+        Feedbacks = FeedbackModel.query.get(id)
 
-        if Feedback:
+        if Feedback_fields:
             for key,value in data.items():
-                setattr(Feedback,key,value)
+                setattr(Feedbacks,key,value)
             try:
                 db.session.commit()
 
