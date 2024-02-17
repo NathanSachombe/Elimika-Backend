@@ -14,7 +14,7 @@ Feedback_fields = {
 
 class Feedback(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument('comment', required=False, )
+    parser.add_argument('comment', required=False)
     parser.add_argument('likes', required= False )
     parser.add_argument('dislikes', required= False)
     

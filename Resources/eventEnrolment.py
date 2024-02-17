@@ -26,7 +26,7 @@ class EnrolledEvents(Resource):
     def post(self):
         data = EnrolledEvents.enrolledEvent_parser.parse_args()
         current_user_id = get_jwt_identity()
-        check_event_existence = EventModel.query.get(data['event-id'])
+        check_event_existence = EventModel.query.get(data['event_id'])
 
         if not check_event_existence:
             return{"message": "Event not found"}, 400
