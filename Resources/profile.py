@@ -9,7 +9,7 @@ profile_fields = {
     "phone": fields.String,
     "email": fields.String,
 }
-
+#class profile 
 class ProfileResource(Resource):
     profile_parser = reqparse.RequestParser()
     profile_parser.add_argument('first_name', type=str, help="Enter the first name")
