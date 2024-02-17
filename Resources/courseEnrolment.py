@@ -11,10 +11,8 @@ userCourse_fields = {
  
 class UserCourses(Resource):
     userCourse_parser = reqparse.RequestParser()
-    #userworkout_parser.add_argument('user_id', required = True,type=int,help="Users id is required" )
     userCourse_parser.add_argument('course_id', required = True,type=int,help="course id is required" )
     
-    #should get data of the user who is currently logged in and wants to see the workout he/she is currentry enrolled in
     @jwt_required()
     def get(self):
         current_user_id = get_jwt_identity()

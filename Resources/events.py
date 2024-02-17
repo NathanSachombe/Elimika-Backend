@@ -63,7 +63,7 @@ class Events(Resource):
             event = EventModel.query.filter_by(id=id).first()
 
             if event:
-                data = Events.update_parser.parse_args()
+                data = Events.parser.parse_args()
                 for key, value in data.items():
                     if value is not None:
                         setattr(event, key, value)

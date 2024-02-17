@@ -6,6 +6,7 @@ from flask_bcrypt import generate_password_hash
 from flask_jwt_extended import create_access_token, create_refresh_token
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 from Resources.courses import resource_fields
+from Resources.events import resource_fields
 
 #user fields 
 user_fields = {
@@ -14,7 +15,8 @@ user_fields = {
     "email" : fields.String,
     "password" : fields.String,
     "role":fields.String,
-    "courses": fields.Nested(resource_fields)
+    "courses": fields.Nested(resource_fields),
+    "events": fields.Nested(resource_fields)
 }
 
 class User(Resource):
