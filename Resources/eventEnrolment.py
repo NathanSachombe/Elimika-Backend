@@ -34,7 +34,6 @@ class EnrolledEvents(Resource):
       existing_booking = UserEventModel.query.filter_by(user_id=current_user_id, event_id=data['event_id']).first()
 
       if existing_booking:
-            # User has already booked for this event
             return {"message": "You have already booked for this event"}, 400
 
       data['user_id'] = current_user_id
