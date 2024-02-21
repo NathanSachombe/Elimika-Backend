@@ -24,26 +24,35 @@ class EnrolledEvents(Resource):
         
     @jwt_required()
     def post(self):
-      data = EnrolledEvents.enrolledEvent_parser.parse_args()
-      current_user_id = get_jwt_identity()
-      check_event_existence = EventModel.query.get(data['event_id'])
+        data = EnrolledEvents.enrolledEvent_parser.parse_args()
+        current_user_id = get_jwt_identity()
+        check_event_existence = EventModel.query.get(data['event_id'])
 
-      if not check_event_existence:
-            return {"message": "event not found"}, 404
-          
-      existing_booking = UserEventModel.query.filter_by(user_id=current_user_id, event_id=data['event_id']).first()
+        if not check_event_existence:
+            return {"message": "Event not found"}, 404
 
-      if existing_booking:
+        existing_booking = UserEventModel.query.filter_by(user_id=current_user_id, event_id=data['event_id']).first()
+
+        if existing_booking:
             # User has already booked for this event
             return {"message": "You have already booked for this event"}, 400
+        
+        # getting the capacity of the event a person is booking tor so that he cant book if no space
+        event = EventModel.query.get(data['event_id'])
+        if event.capacity <= 0:
+            return {"message": "Event is already fully booked"}, 400
 
-      data['user_id'] = current_user_id
-      new_event = UserEventModel(**data)
+        # Decrementing  event capacity when a user succesfully books an event
+        event.capacity -= 1
+        db.session.commit()
 
-      db.session.add(new_event)
-      db.session.commit()
-      
-      return {"message": "Event booked successfully"}, 201
+        data['user_id'] = current_user_id
+        new_event = UserEventModel(**data)
+
+        db.session.add(new_event)
+        db.session.commit()
+
+        return {"message": "Event booked successfully"}, 201
         
 
 

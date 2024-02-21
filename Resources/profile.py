@@ -36,7 +36,7 @@ class ProfileResource(Resource):
         return profile
 
     @jwt_required()
-    def put(self):
+    def post(self):
         data = ProfileResource.profile_parser.parse_args()
 
         # Check if the user exists
