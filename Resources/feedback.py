@@ -1,10 +1,11 @@
 from flask_restful import Resource ,fields ,marshal_with,reqparse ,marshal
 from flask_jwt_extended import jwt_required , get_jwt_identity
-from models import FeedbackModel ,db
+from models import FeedbackModel ,db,UserModel
 
 Feedback_fields = {
     'id': fields.Integer,
     'user_id': fields.Integer,
+    'username': fields.String,
     'comment': fields.String,
     'likes': fields.Integer,
     'dislikes': fields.Integer,
@@ -18,7 +19,7 @@ class Feedback(Resource):
     parser.add_argument('likes', required= False )
     parser.add_argument('dislikes', required= False)
     
-#Read a feedback 
+#Read feedbacks
     @marshal_with(Feedback_fields)
     def get(self, id=None):
     
@@ -36,7 +37,8 @@ class Feedback(Resource):
       data = Feedback.parser.parse_args() 
       current_user_id = get_jwt_identity()
       data['user_id'] = current_user_id
-
+      user = UserModel.query.filter_by(id = current_user_id).first()
+      data['username'] = user.username
       feedback= FeedbackModel(**data)
 
       try:
@@ -50,7 +52,7 @@ class Feedback(Resource):
       
  
     
-    #@jwt_required()
+    @jwt_required()
     def patch(self,id):
         data = Feedback.parser.parse_args()
         Feedbacks = FeedbackModel.query.get(id)
@@ -69,7 +71,7 @@ class Feedback(Resource):
             return {"message":"Feedback not found"}
         
 
-    #@jwt_required()
+    @jwt_required()
     def delete(self,id):
         Feedback = FeedbackModel.query.filter_by(id = id).first()
         if Feedback:

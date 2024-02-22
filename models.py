@@ -63,6 +63,7 @@ class FeedbackModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    username = db.Column(db.String)
     comment = db.Column(db.Text, nullable=False)
     likes = db.Column(db.Integer)
     dislikes = db.Column(db.Integer)
