@@ -58,9 +58,9 @@ api.add_resource(ProfileResource, '/profile','/profile/<int:id>')
 
 
 #Function to send a booking confirmation email 
-def send_booking_confirmation_email(email,event_title,username):
+def send_booking_confirmation_email(email,event_title):
     msg = Message('Event Booking Confirmation', sender='kevin.wanjiru600@example.com', recipients=[email])
-    msg.body = f'Dear {username} You have successfully booked for the event:{event_title} , Hope you enjoy the Event!'
+    msg.body = f'You have successfully booked for the event: {event_title} , Hope you enjoy the Event!'
     mail.send(msg)
 
 @app.route('/enrolledEvent', methods=['POST'])
@@ -95,10 +95,10 @@ def post():
     db.session.commit()
     user = UserModel.query.filter_by(id = current_user_id).first()
     email = user.email
-    username = user.username
+    #username = user.username
     event_title = event.title
     if email and event_title:
-        send_booking_confirmation_email(username,email,event_title )
+        send_booking_confirmation_email(email,event_title )
     else:
         return {"message": "Email not found"}, 404
         
