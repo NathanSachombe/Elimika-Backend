@@ -10,6 +10,7 @@ class UserModel(db.Model):
     email = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
     role = db.Column(db.String(50), nullable=True)
+    verified = db.Column(db.Boolean, default=False)
 
     events = db.relationship('EventModel', secondary='user_events', backref='users')
     courses = db.relationship('CourseModel', secondary='user_courses', backref='users')

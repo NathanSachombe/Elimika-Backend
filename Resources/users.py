@@ -1,10 +1,6 @@
 from models import UserModel,db
 from flask_restful import Resource, fields, marshal, reqparse
-from sqlalchemy import or_
-from flask_bcrypt import generate_password_hash
-
-from flask_jwt_extended import create_access_token, create_refresh_token
-from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import  jwt_required, get_jwt_identity
 from Resources.courses import resource_fields
 from Resources.events import resource_fields
 
@@ -20,6 +16,7 @@ user_fields = {
 }
 
 class User(Resource):
+    #we are getting them with the "user_data = request.get_json()" in the app.py so now we dont need them but let them stay
     user_parser = reqparse.RequestParser()
     user_parser.add_argument('username', required=True, type=str, help="Enter the username")
     user_parser.add_argument('email', required=True, type=str,help="Enter the email")
@@ -34,60 +31,57 @@ class User(Resource):
             return {"message": "user not found"}
         return marshal(user, user_fields)
     
-    def post(self):
-        user_data = User.user_parser.parse_args()
+    # def post(self):
+    #     user_data = User.user_parser.parse_args()
 
-        user_data['password'] = generate_password_hash(user_data['password'])
+    #     user_data['password'] = generate_password_hash(user_data['password'])
         
-        new_user = UserModel(**user_data)
+    #     new_user = UserModel(**user_data)
 
-         # Check if email is already taken
-        existing_email = UserModel.query.filter_by(email=user_data['email']).first()
-        if existing_email:
-            return {"message": "Email already taken", "status": "fail"}, 400
+    #      # Check if email is already taken
+    #     existing_email = UserModel.query.filter_by(email=user_data['email']).first()
+    #     if existing_email:
+    #         return {"message": "Email already taken", "status": "fail"}, 400
 
-         # Check if username is already taken
-        existing_username = UserModel.query.filter_by(username=user_data['username']).first()
-        if existing_username:
-           return {"message": "Username already taken", "status": "fail"}, 400
+    #      # Check if username is already taken
+    #     existing_username = UserModel.query.filter_by(username=user_data['username']).first()
+    #     if existing_username:
+    #        return {"message": "Username already taken", "status": "fail"}, 400
 
-        try:
-             # Add the new user to the database
-             db.session.add(new_user)
-             db.session.commit()
+    #     try:
+    #          # Add the new user to the database
+    #          db.session.add(new_user)
+    #          db.session.commit()
 
-             # Refresh the user object after committing to get the updated information
-             db.session.refresh(new_user)
+    #          # Refresh the user object after committing to get the updated information
+    #          db.session.refresh(new_user)
 
-             # Convert the user to JSON
-             user_json = new_user.to_json()
+    #          # Convert the user to JSON
+    #          user_json = new_user.to_json()
 
-             # Create access and refresh tokens
-             access_token = create_access_token(identity=user_json['id'])
-             refresh_token = create_refresh_token(identity=user_json['id'])
+    #          # Create access and refresh tokens
+    #          access_token = create_access_token(identity=user_json['id'])
+    #          refresh_token = create_refresh_token(identity=user_json['id'])
 
-             # Return success message and tokens
-             return {
-                 "message": "Account created successfully",
-                 "status": "success",
-                 "access_token": access_token,
-                 "refresh_token": refresh_token,
-                 "user": user_json
-                 }, 201
+    #          # Return success message and tokens
+    #          return {
+    #              "message": "Account created successfully",
+    #              "status": "success",
+    #              "access_token": access_token,
+    #              "refresh_token": refresh_token,
+    #              "user": user_json
+    #              }, 201
 
-        except:
-                 return {"message": "Unable to create user", "status": "fail"}, 500
+    #     except:
+    #              return {"message": "Unable to create user", "status": "fail"}, 500
 
     #when admin wants to delete a user or a user wants to delete his or her account
-    @jwt_required
-    def delete(self):
-        current_user_id = get_jwt_identity()
-        user = UserModel.query.get(current_user_id)
+    def delete(self,id):
+        user = UserModel.query.filter_by(id = id).first()
         if user:
             try:
                 db.session.delete(user)
                 db.session.commit()
-
                 return {"message":"Account deleted successfully"}
             except:
                 return {"message":"user unable to be deleted"}
@@ -100,27 +94,27 @@ class Login(Resource):
     user_parser.add_argument('usernameOrEmail', required=True, type=str, help="Enter the email or username")
     user_parser.add_argument('password', required=True, type=str, help="Enter password")
 
-    def post(self):
-        data = Login.user_parser.parse_args()
+    # def post(self):
+    #     data = Login.user_parser.parse_args()
 
-        user = UserModel.query.filter(or_(UserModel.email == data['usernameOrEmail'], UserModel.username == data['usernameOrEmail'])).first()
+    #     user = UserModel.query.filter(or_(UserModel.email == data['usernameOrEmail'], UserModel.username == data['usernameOrEmail'])).first()
 
-        if user:
-            checking_password = user.check_password(data['password'])
-            if checking_password:
-                # don't forget access token and refresh token
-                user_json = user.to_json()
-                access_token = create_access_token(identity=user_json['id'])
-                refresh_token = create_refresh_token(identity=user_json['id'])
-                return {
-                    "message": "Login successful",
-                    "status": "success",
-                    "access_token": access_token,
-                    "refresh_token": refresh_token,
-                    "user": user_json
-                }, 200
+    #     if user:
+    #         checking_password = user.check_password(data['password'])
+    #         if checking_password:
+    #             # don't forget access token and refresh token
+    #             user_json = user.to_json()
+    #             access_token = create_access_token(identity=user_json['id'])
+    #             refresh_token = create_refresh_token(identity=user_json['id'])
+    #             return {
+    #                 "message": "Login successful",
+    #                 "status": "success",
+    #                 "access_token": access_token,
+    #                 "refresh_token": refresh_token,
+    #                 "user": user_json
+    #             }, 200
             
-            else:
-                return {"message": "Invalid email/username or password", "status": "fail"}, 403
-        else:
-            return {"message": "Invalid email/username or password", "status": "fail"}, 403
+    #         else:
+    #             return {"message": "Invalid email/username or password", "status": "fail"}, 403
+    #     else:
+    #         return {"message": "Invalid email/username or password", "status": "fail"}, 403
