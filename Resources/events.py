@@ -1,5 +1,6 @@
-
+from flask_jwt_extended import  jwt_required
 from flask_restful import Resource, reqparse, fields, marshal_with
+from Resources.auth import admin_required
 from models import db, EventModel
 from datetime import datetime
 
@@ -32,6 +33,8 @@ class Events(Resource):
             events = EventModel.query.all()
             return events
 
+    @jwt_required()
+    @admin_required 
     def post(self):
         data = Events.parser.parse_args()
 
@@ -45,6 +48,8 @@ class Events(Resource):
         except Exception as e:
             return {"message": 'unable to add event', 'status': 'fail'}
 
+    @jwt_required()
+    @admin_required 
     def delete(self, id):
         try:
             event = EventModel.query.filter_by(id=id).first()
@@ -58,6 +63,8 @@ class Events(Resource):
         except Exception as e:
             return {'message': "Failed To Delete The Event"}
 
+    @jwt_required()
+    @admin_required 
     def patch(self, id):
         if id:
             event = EventModel.query.filter_by(id=id).first()

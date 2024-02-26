@@ -60,6 +60,8 @@ api.add_resource(Feedback,'/feedback','/feedback/<int:id>')
 api.add_resource(Events,'/event','/event/<int:id>')
 api.add_resource(ProfileResource, '/profile','/profile/<int:id>')
 
+ADMIN_CODE = 5445
+
 @app.route('/users', methods=['POST'])
 def register():
     user_data = request.get_json()
@@ -71,6 +73,11 @@ def register():
 
     #its false in the db.model when a user confirms email its set to true
     user_data['verified'] = False
+
+    if 'role' in user_data and user_data['role'] == ADMIN_CODE:
+        user_data['role'] = 'admin'
+    else:
+        user_data['role'] = 'user'
     
     new_user = UserModel(**user_data)
 
