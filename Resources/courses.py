@@ -1,4 +1,6 @@
 from flask_restful import Resource, reqparse, fields, marshal_with
+from flask_jwt_extended import  jwt_required
+from Resources.auth import admin_required
 from models import db, CourseModel
 
 resource_fields = {
@@ -30,7 +32,9 @@ class Course(Resource):
         else:
             courses = CourseModel.query.all()
             return courses
-        
+    
+    @jwt_required()
+    @admin_required    
     def post(self):
         data = Course.parser.parse_args()
         course = CourseModel(**data)
@@ -43,6 +47,8 @@ class Course(Resource):
         except Exception as e:
             return {"message": "Unable to add course", "status": "fail"}
         
+    @jwt_required()
+    @admin_required 
     def delete(self, id):
         try:
             course = CourseModel.query.filter_by(id=id).first()
@@ -56,6 +62,8 @@ class Course(Resource):
         except:
             return {"message": "Unable to delete course", "status": "success"}
         
+    @jwt_required()
+    @admin_required 
     def patch(self, id):
         if id:
             course = CourseModel.query.filter_by(id=id).first()
