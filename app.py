@@ -15,6 +15,7 @@ from Resources.profile import ProfileResource
 from Resources.feedback import Feedback
 from Resources.events import Events
 from Resources.eventEnrolment import EnrolledEvents
+from Resources.allusers import AdminUserResource
 from flask import Flask
 from flask_mail import Mail, Message
 
@@ -59,6 +60,7 @@ api.add_resource(EnrolledEvents,'/enrolledEvent','/enrolledEvent/<int:id>')
 api.add_resource(Feedback,'/feedback','/feedback/<int:id>')
 api.add_resource(Events,'/event','/event/<int:id>')
 api.add_resource(ProfileResource, '/profile','/profile/<int:id>')
+api.add_resource(AdminUserResource, '/getusers')
 
 ADMIN_CODE = 5445
 
