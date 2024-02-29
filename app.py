@@ -1,3 +1,4 @@
+import os
 from flask import Flask,request,flash, jsonify, url_for
 from flask_jwt_extended import JWTManager,jwt_required,get_jwt_identity,create_access_token,create_refresh_token
 from models import db,EventModel,UserEventModel,UserModel
@@ -29,23 +30,23 @@ jwt = JWTManager(app)
 #email configuration
 app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'kevin.wanjiru600@gmail.com'
-app.config['MAIL_PASSWORD'] = 'jjpsewfynmpgkeom'
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
 
 #serializer secret
-serializer = URLSafeSerializer('thisismysecrekicanttellanyone')
+serializer = URLSafeSerializer(os.environ.get('SERIALIZER'))
 #secret key for the app 
-app.secret_key = 'thisisasectret'
+app.secret_key = os.environ.get('APP_SECRET_KEY')
 #database and error handling setup
-app.config['SQLALCHEMY_DATABASE_URI'] ='sqlite:///database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['BUNDLE_ERRORS'] = True
 
 #setting up jwt
-app.config["JWT_SECRET_KEY"] = "thisisasecrettoeveryone"  # we should remember to change this
+app.config["JWT_SECRET_KEY"] = os.environ.get('JWT_SECRET_KEY')  # we should remember to change this
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=30)
 
 migrations = Migrate(app,db)
