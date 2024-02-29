@@ -63,7 +63,7 @@ api.add_resource(Events,'/event','/event/<int:id>')
 api.add_resource(ProfileResource, '/profile','/profile/<int:id>')
 api.add_resource(AdminUserResource, '/getusers')
 
-ADMIN_CODE = 5445
+ADMIN_CODE = "5445"
 
 @app.route('/users', methods=['POST'])
 def register():
