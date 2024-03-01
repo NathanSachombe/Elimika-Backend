@@ -77,10 +77,7 @@ def register():
     #its false in the db.model when a user confirms email its set to true
     user_data['verified'] = False
 
-    if 'role' in user_data and user_data['role'] == Admin_secret:
-        user_data['role'] = 'admin'
-    else:
-        user_data['role'] = 'user'
+    user_data['role'] = 'admin'
     
     new_user = UserModel(**user_data)
 
