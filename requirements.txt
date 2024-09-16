@@ -21,7 +21,7 @@ packaging==24.1
 psycopg2-binary==2.9.9
 PyJWT==2.9.0
 python-dotenv==1.0.1
-pytz==2024.1
+pytz==2024.2
 six==1.16.0
 SQLAlchemy==2.0.34
 typing_extensions==4.12.2
