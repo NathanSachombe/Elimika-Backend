@@ -20,8 +20,10 @@ MarkupSafe==3.0.2
 packaging==24.2
 psycopg2-binary==2.9.10
 PyJWT==2.10.1
+
 python-dotenv==1.0.1
 pytz==2025.2
+ main
 six==1.17.0
 SQLAlchemy==2.0.40
 typing_extensions==4.12.2
